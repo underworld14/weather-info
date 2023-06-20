@@ -16,13 +16,10 @@ const useWeatherState = create<WeatherState>()(
     fahrenheitLists: [],
     loadWeather: async () => {
       set({ loading: true });
+      const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
       const [metricResponse, imperialResponse] = await Promise.all([
-        fetch(
-          `https://api.openweathermap.org/data/2.5/forecast?q=Kathmandu&appid=666c31c03129cf7eb29df439367c28a6&units=metric`
-        ),
-        fetch(
-          `https://api.openweathermap.org/data/2.5/forecast?q=Kathmandu&appid=666c31c03129cf7eb29df439367c28a6&units=imperial`
-        ),
+        fetch(`https://api.openweathermap.org/data/2.5/forecast?q=Kathmandu&appid=${apiKey}&units=metric`),
+        fetch(`https://api.openweathermap.org/data/2.5/forecast?q=Kathmandu&appid=${apiKey}&units=imperial`),
         // throttle the loading to 3 seconds
         new Promise((resolve) => setTimeout(resolve, 3000)),
       ]);
