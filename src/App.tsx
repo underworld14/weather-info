@@ -1,35 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect } from "react";
+import { Transition } from "@headlessui/react";
+
+import useWeatherState from "./weather-state";
+import SplashScreen from "./screens/splash-screen";
+import WeatherScreen from "./screens/weather-screen";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { loading, loadWeather } = useWeatherState();
+
+  useEffect(() => {
+    loadWeather();
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Transition
+        show={loading}
+        enter="transition-opacity duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-300"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <SplashScreen />
+      </Transition>
+      {!loading && <WeatherScreen />}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
